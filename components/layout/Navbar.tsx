@@ -2,6 +2,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BellIcon, SearchIcon, MenuIcon, UserCircleIcon, SunIcon, MoonIcon } from '../shared/Icons';
 import { useTheme } from '../../hooks/useTheme';
+import { useSound } from '../../hooks/useSound';
+import { SOUNDS } from '../../sounds';
 
 interface NavbarProps {
     toggleSidebar: () => void;
@@ -13,6 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
     const profileRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
     const { theme, toggleTheme } = useTheme();
+    const { playSound } = useSound();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -27,13 +30,18 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const handleToggleTheme = () => {
+        playSound(theme === 'light' ? SOUNDS.TOGGLE_OFF : SOUNDS.TOGGLE_ON);
+        toggleTheme();
+    }
+
     return (
         <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-40">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Left side */}
                     <div className="flex items-center">
-                        <button onClick={toggleSidebar} className="text-gray-500 dark:text-gray-400 focus:outline-none lg:hidden">
+                        <button onClick={() => { playSound(SOUNDS.CLICK); toggleSidebar(); }} className="text-gray-500 dark:text-gray-400 focus:outline-none lg:hidden">
                             <MenuIcon className="h-6 w-6" />
                         </button>
                         <div className="hidden lg:flex relative ml-4">
@@ -50,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
                     {/* Right side */}
                     <div className="flex items-center space-x-4">
-                        <button onClick={toggleTheme} className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        <button onClick={handleToggleTheme} className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                             {theme === 'light' ? <MoonIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
                         </button>
 
@@ -88,8 +96,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                                             <p className="text-sm font-medium text-gray-900 dark:text-white">John Doe</p>
                                             <p className="text-sm text-gray-500 dark:text-gray-400">john.doe@example.com</p>
                                         </div>
-                                        <a href="#/settings" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
+                                        <a href="#/profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
+                                        <a href="#/settings" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
                                         <a href="#" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Sign out</a>
                                     </div>
                                 </div>

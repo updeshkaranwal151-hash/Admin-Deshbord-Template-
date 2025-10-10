@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Card from '../components/shared/Card';
 import ThemeToggle from '../components/shared/ThemeToggle';
@@ -51,7 +50,7 @@ const SettingsPage: React.FC = () => {
         </div>
 
         <div className="lg:col-span-1 space-y-6">
-             <Card title="Theme">
+             <Card title="Preferences">
                  <div className="flex items-center justify-between">
                      <p className="text-gray-700 dark:text-gray-300">Appearance</p>
                      <ThemeToggle />

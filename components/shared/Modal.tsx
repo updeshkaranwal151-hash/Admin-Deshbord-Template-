@@ -1,6 +1,7 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { XIcon } from './Icons';
+import { useSound } from '../../hooks/useSound';
+import { SOUNDS } from '../../sounds';
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,6 +11,17 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+  const { playSound } = useSound();
+  const prevIsOpen = useRef(isOpen);
+
+  useEffect(() => {
+    // Play sound only when modal opens, not on re-renders
+    if (isOpen && !prevIsOpen.current) {
+      playSound(SOUNDS.MODAL_OPEN);
+    }
+    prevIsOpen.current = isOpen;
+  }, [isOpen, playSound]);
+
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {

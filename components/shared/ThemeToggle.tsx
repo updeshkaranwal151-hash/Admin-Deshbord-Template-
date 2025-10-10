@@ -1,14 +1,21 @@
-
 import React from 'react';
 import { useTheme } from '../../hooks/useTheme';
 import { SunIcon, MoonIcon } from './Icons';
+import { useSound } from '../../hooks/useSound';
+import { SOUNDS } from '../../sounds';
 
 const ThemeToggle: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const { playSound } = useSound();
+
+  const handleToggle = () => {
+    playSound(theme === 'light' ? SOUNDS.TOGGLE_OFF : SOUNDS.TOGGLE_ON);
+    toggleTheme();
+  };
 
   return (
     <button
-      onClick={toggleTheme}
+      onClick={handleToggle}
       className={`relative inline-flex items-center h-8 rounded-full w-16 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-gray-800 ${
         theme === 'light' ? 'bg-primary-500' : 'bg-gray-700'
       }`}

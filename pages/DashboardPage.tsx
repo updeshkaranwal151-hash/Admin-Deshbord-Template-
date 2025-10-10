@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Card from '../components/shared/Card';
 import MetricCard from '../components/dashboard/MetricCard';
@@ -8,6 +7,9 @@ import ActivityTimeline from '../components/dashboard/ActivityTimeline';
 import SalesChart from '../components/dashboard/SalesChart';
 import UsersChart from '../components/dashboard/UsersChart';
 import RevenueSourceChart from '../components/dashboard/RevenueSourceChart';
+import DeviceUsageChart from '../components/dashboard/DeviceUsageChart';
+import UserSatisfactionChart from '../components/dashboard/UserSatisfactionChart';
+import PerformanceChart from '../components/dashboard/PerformanceChart';
 
 const DashboardPage: React.FC = () => {
   return (
@@ -42,6 +44,13 @@ const DashboardPage: React.FC = () => {
         <div className="lg:col-span-2">
           <RevenueSourceChart />
         </div>
+      </div>
+
+      {/* New Row of Animated Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <PerformanceChart />
+          <DeviceUsageChart />
+          <UserSatisfactionChart />
       </div>
 
     </div>

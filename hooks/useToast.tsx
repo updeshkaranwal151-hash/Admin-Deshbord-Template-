@@ -1,6 +1,7 @@
-
 import React, { createContext, useState, useCallback, useContext, ReactNode } from 'react';
 import Toast from '../components/shared/Toast';
+import { useSound } from './useSound';
+import { SOUNDS } from '../sounds';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -18,14 +19,22 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const { playSound } = useSound();
 
   const addToast = useCallback((message: string, type: ToastType) => {
     const id = Date.now();
     setToasts((prevToasts) => [...prevToasts, { id, message, type }]);
+    
+    if (type === 'success') {
+      playSound(SOUNDS.SUCCESS);
+    } else if (type === 'error') {
+      playSound(SOUNDS.ERROR);
+    }
+    
     setTimeout(() => {
       setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
     }, 5000);
-  }, []);
+  }, [playSound]);
 
   const removeToast = (id: number) => {
     setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));

@@ -1,10 +1,11 @@
-
 import React, { useState, useMemo } from 'react';
 import { MOCK_USERS } from '../../constants';
 import type { User } from '../../types';
 import { useToast } from '../../hooks/useToast';
 import Modal from '../shared/Modal';
 import { ArrowUpIcon, ArrowDownIcon, DotsVerticalIcon } from '../shared/Icons';
+import { useSound } from '../../hooks/useSound';
+import { SOUNDS } from '../../sounds';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -18,6 +19,7 @@ const UsersTable: React.FC = () => {
     const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: SortDirection } | null>(null);
     const [isModalOpen, setModalOpen] = useState(false);
     const { addToast } = useToast();
+    const { playSound } = useSound();
 
     const filteredUsers = useMemo(() => {
         let filtered = users.filter(user =>
@@ -51,6 +53,7 @@ const UsersTable: React.FC = () => {
     };
 
     const handleDelete = (id: number) => {
+        playSound(SOUNDS.CLICK);
         if (window.confirm('Are you sure you want to delete this user?')) {
             setUsers(users.filter(user => user.id !== id));
             addToast('User deleted successfully', 'success');
@@ -62,6 +65,11 @@ const UsersTable: React.FC = () => {
         addToast('User added successfully!', 'success');
         // In a real app, you would add the new user to the state
     };
+
+    const handleOpenModal = () => {
+        playSound(SOUNDS.CLICK);
+        setModalOpen(true);
+    }
 
 
     const SortableHeader: React.FC<{ sortKey: SortKey, title: string }> = ({ sortKey, title }) => (
@@ -85,7 +93,7 @@ const UsersTable: React.FC = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
-                <button onClick={() => setModalOpen(true)} className="w-full sm:w-auto px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition duration-300">
+                <button onClick={handleOpenModal} className="w-full sm:w-auto px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition duration-300">
                     Add User
                 </button>
             </div>
@@ -105,7 +113,7 @@ const UsersTable: React.FC = () => {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="flex items-center">
                                         <div className="flex-shrink-0 h-10 w-10">
-                                            <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                                            <img className="h-10 w-10 rounded-full" src={user.avatar} alt={`Avatar of ${user.name}`} />
                                         </div>
                                         <div className="ml-4">
                                             <div className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</div>
@@ -120,7 +128,7 @@ const UsersTable: React.FC = () => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{user.role}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button onClick={() => addToast(`Editing ${user.name}`, 'info')} className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-200">Edit</button>
+                                    <button onClick={() => { playSound(SOUNDS.CLICK); addToast(`Editing ${user.name}`, 'info')}} className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-200">Edit</button>
                                     <button onClick={() => handleDelete(user.id)} className="ml-4 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200">Delete</button>
                                 </td>
                             </tr>

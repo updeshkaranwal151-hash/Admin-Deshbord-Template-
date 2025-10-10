@@ -1,3 +1,5 @@
+// Fix: Import React to resolve 'React' namespace error.
+import React from 'react';
 
 export interface User {
   id: number;
@@ -36,4 +38,34 @@ export interface Message {
     preview: string;
     timestamp: string;
     unread: boolean;
+}
+
+export interface Task {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+export interface KanbanTask {
+  id: string;
+  title: string;
+  description: string;
+  status: 'todo' | 'inprogress' | 'done';
+  priority: 'low' | 'medium' | 'high';
+  userAvatar: string;
+}
+
+export interface FileItem {
+  id: string;
+  name: string;
+  type: 'folder' | 'image' | 'document' | 'video' | 'other';
+  size: string;
+  modifiedDate: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  color: 'primary' | 'green' | 'orange' | 'red';
 }
